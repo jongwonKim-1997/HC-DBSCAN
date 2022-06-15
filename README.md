@@ -12,3 +12,14 @@ for DBSCAN.
 
 Our algorithm performs well and shows good clustering performance compared with
 benchmark constrained methods for DBSCAN on simulated and real datasets.
+
+
+## Requirements
+Pytorch
+GPytorch
+Scikit-learn
+Pandas
+Numpy
+matplotlib
+UMAP
+DBCV
