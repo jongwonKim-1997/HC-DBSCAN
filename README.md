@@ -15,18 +15,22 @@ benchmark constrained methods for DBSCAN on simulated and real datasets.
 
 
 ## Requirements
-Pytorch
+Pytorch 1.9.0
 
-GPytorch
+GPytorch 1.5.1
 
-Scikit-learn
+scikit-learn 1.0.2
 
-Pandas
+pandas 1.3.2
 
-Numpy
+numpy 1.20.3
 
-matplotlib
+matplotlib 3.4.2
 
-UMAP
+UMAP 0.5.2
 
-DBCV
+We also provide whole experiments results and process. So if you want to check the entire process, the following packages are required.
+
+DBCV (Only one version)
+
+torchvision 0.10.0
