@@ -29,6 +29,8 @@ matplotlib 3.4.2
 
 UMAP 0.5.2
 
+scipy 1.7.1
+
 We also provide whole experiments results and process. So if you want to check the entire process, the following packages are required.
 
 DBCV (Only one version)
