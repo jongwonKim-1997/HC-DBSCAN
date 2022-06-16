@@ -120,7 +120,7 @@ def main():
         Best_X_list.append(best_hyperparameter)
         NMI_val_list.append(NMI_value)
         Best_label_list.append(labels)
-
+    
 
     # Plot the image
     color_list = ['lightcoral','pink','r','y','g','c','b','m','green','navy']
@@ -200,8 +200,8 @@ def main():
 
         n_labels = len(np.unique(labels)) 
         for i in range(-1,n_labels):
-            idx = (labels==i)
-            plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01)
+            idx_list = (labels==i)
+            plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
         plt.title(HPO_list_name[idx] +" result with MNIST dataset with NMI value:" +str(NMI_val_list[idx]))
     plt.show()
     plt.close(fig)
