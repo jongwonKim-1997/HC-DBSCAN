@@ -2,6 +2,12 @@
 import torch
 
 
+import gpytorch 
+
+
+
+
+
 from gpytorch.functions import MaternCovariance
 from gpytorch.settings import trace_mode
 from gpytorch.kernels import Kernel
@@ -84,3 +90,16 @@ class RBFKernel2(Kernel):
                 x1, x2, square_dist=True, diag=False, dist_postprocess_func=postprocess_rbf, postprocess=False, **params
             ),
         )
+
+
+
+class AdvancedGPModel(gpytorch.models.ExactGP):
+    def __init__(self, train_x, train_y, likelihood,n_hyp):
+        super(AdvancedGPModel, self).__init__(train_x, train_y, likelihood)
+        self.mean_module = gpytorch.means.ConstantMean()
+        self.covar_module = gpytorch.kernels.ScaleKernel(gpytorch.kernels.MaternKernel(active_dims = torch.tensor([0])  ) * kernel.MaternKernel2(active_dims = torch.tensor([1]) ) )
+
+    def forward(self, x):
+        mean_x = self.mean_module(x)
+        covar_x = self.covar_module(x)
+        return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)
