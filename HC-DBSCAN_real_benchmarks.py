@@ -163,4 +163,4 @@ parser.add_argument('--n_iter',     type=int,   default=10)
 args = parser.parse_args()
 
 if __name__ == "__main__":
-    main(args.data_name.args.n_iter)
+    main(args.data_name, args.n_iter)
