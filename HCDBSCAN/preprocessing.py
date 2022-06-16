@@ -31,54 +31,6 @@ def import_data(data='mnist', size=1000, device='cpu'):
             Y = Y.to(device).numpy()
         train_data = X.reshape(len(X),-1)
         train_labels = Y 
-    # REUTERS   
-    elif data =='reuters':
-        train_data = pd.read_csv("./data/20_newsgroup.csv")
-        train_data = train_data.dropna()
-        train_data['labels'] = pd.Categorical(train_data.copy()['labels']).codes
-        train_labels = train_data['labels']
-        train_data = train_data.drop(['labels'],axis=1)
-
-    elif data =="cifar10":
-        mnist_train = dsets.CIFAR10(root='MNIST_data/', # 다운로드 경로 지정
-                                train=True, # True를 지정하면 훈련 데이터로 다운로드
-                                transform=transforms.ToTensor(), # 텐서로 변환
-                                download=True)
-
-        batch_size = 50000
-        data_loader = torch.utils.data.DataLoader(dataset=mnist_train,
-                                                batch_size=batch_size,
-                                                shuffle=False,
-                                                drop_last=True)
-                            
-        for X, Y in data_loader: # 미니 배치 단위로 꺼내온다. X는 미니 배치, Y느 ㄴ레이블.
-            # image is already size of (28x28), no reshape
-            # label is not one-hot encoded
-            X = X.to(device).numpy()
-            Y = Y.to(device).numpy()
-        train_data = X.reshape(len(X),-1)
-        train_labels = Y 
-
-    elif data =="FashionMNIST":
-        mnist_train = dsets.FashionMNIST(root='FashionMNIST/', # 다운로드 경로 지정
-                                train=True, # True를 지정하면 훈련 데이터로 다운로드
-                                transform=transforms.ToTensor(), # 텐서로 변환
-                                download=True)
-
-        batch_size = 60000
-        data_loader = torch.utils.data.DataLoader(dataset=mnist_train,
-                                                batch_size=batch_size,
-                                                shuffle=False,
-                                                drop_last=True)
-                            
-        for X, Y in data_loader: # 미니 배치 단위로 꺼내온다. X는 미니 배치, Y느 ㄴ레이블.
-            # image is already size of (28x28), no reshape
-            # label is not one-hot encoded
-            X = X.to(device).numpy()
-            Y = Y.to(device).numpy()
-        train_data = X.reshape(len(X),-1)
-        train_labels = Y 
-
     elif data =='iris':
         train_data = pd.read_csv("./data/iris.csv")
         train_data = train_data.dropna()
@@ -86,7 +38,7 @@ def import_data(data='mnist', size=1000, device='cpu'):
         train_data['iris'] = pd.Categorical(train_data.copy()['iris']).codes
         train_labels = train_data['iris']
         train_data = train_data.drop(['iris'],axis=1)
-    elif data =='Cell237':
+    elif data =='cell_237':
         train_data = pd.read_csv("./data/Cell237.csv")
         train_data = train_data.dropna()
         train_labels = train_data['class']
@@ -101,13 +53,13 @@ def import_data(data='mnist', size=1000, device='cpu'):
         train_labels = train_data['seeds']
         train_data = train_data.drop(['seeds'],axis=1)
 
-    elif data =='table_1':
+    elif data =='abalone':
         train_data = pd.read_csv("./data/abalone.csv")
         train_data = train_data.dropna()
         train_labels = train_data['Rings']
         train_data = train_data.drop(['Rings'],axis=1)
 
-    elif data =='table_2':
+    elif data =='cortex_nuclear':
         train_data = pd.read_csv("./data/Data_Cortex_Nuclear.csv")
         train_data = train_data.dropna()
         train_labels = train_data['class']
@@ -115,7 +67,7 @@ def import_data(data='mnist', size=1000, device='cpu'):
         train_labels = train_data['class']
         train_data = train_data.drop(['class'],axis=1)
 
-    elif data =='table_3':
+    elif data =='dry_bean':
         train_data = pd.read_csv("./data/Dry_Bean_Dataset.csv")
         train_data = train_data.dropna()
         train_labels = train_data['Class']
@@ -123,7 +75,7 @@ def import_data(data='mnist', size=1000, device='cpu'):
         train_labels = train_data['Class']
         train_data = train_data.drop(['Class'],axis=1)
 
-    elif data =='table_4':
+    elif data =='faults':
         train_data = pd.read_csv("./data/Faults.csv")
         train_data = train_data.dropna()
         train_labels = train_data['class']
@@ -131,7 +83,7 @@ def import_data(data='mnist', size=1000, device='cpu'):
         train_labels = train_data['class']
         train_data =  train_data.drop(['class'],axis=1)
 
-    elif data =='table_5':    
+    elif data =='frogs_mfccs':    
         train_data = pd.read_csv("./data/Frogs_MFCCs.csv")
         train_data = train_data.dropna()
         train_labels = train_data['Species']

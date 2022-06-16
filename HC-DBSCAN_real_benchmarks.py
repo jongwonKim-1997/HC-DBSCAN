@@ -59,7 +59,7 @@ def main(data_name = 'mnist',n_iter=10):
         labels = cluster_data.labels_
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
         # Feasible solution = negative value
-        C_score = - min(n_labels - n_clusters , n_clusters -n_labels)
+        C_score = - min(int(n_labels *1.1) - n_clusters , n_clusters - int(n_labels*0.9))
 
         return C_score
 
