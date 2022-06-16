@@ -1,6 +1,16 @@
-def import_data(data='mnist', size=1000):
-    # MNIST
+#%%
+import torchvision.datasets as dsets
+import torchvision.transforms as transforms
 
+import torch
+import pandas as pd
+import imageio
+import umap
+import numpy as np
+
+
+def import_data(data='mnist', size=1000, device='cpu'):
+    # MNIST
     if data == "mnist":
         mnist_train = dsets.MNIST(root='MNIST_data/', # 다운로드 경로 지정
                                 train=True, # True를 지정하면 훈련 데이터로 다운로드
@@ -13,7 +23,7 @@ def import_data(data='mnist', size=1000):
                                                 batch_size=batch_size,
                                                 shuffle=False,
                                                 drop_last=True)
-                            
+    
         for X, Y in data_loader: # 미니 배치 단위로 꺼내온다. X는 미니 배치, Y느 ㄴ레이블.
             # image is already size of (28x28), no reshape
             # label is not one-hot encoded
@@ -187,17 +197,12 @@ def import_data(data='mnist', size=1000):
     train_labels = train_labels.reshape(-1)
 
     return train_data, train_labels
-def embedding_data(train_data ,embedding = 'umap',n_components=2):
+def embedding_data(train_data ,embedding = 'umap',n_components=2,n_neighbors=10, min_dist=0.001):
 
 
     # UMAP
     if embedding == 'umap':
-        train_data = umap.UMAP(n_components = n_components,n_neighbors=10, min_dist=0.001).fit_transform(train_data)
-
-    # PCA 
-    if embedding == 'pca':
-        pca = PCA(n_components=n_components)
-        train_data = pca.fit_transform(train_data)
+        train_data = umap.UMAP(n_components = n_components,n_neighbors = n_neighbors, min_dist = min_dist).fit_transform(train_data)
 
     return train_data
 

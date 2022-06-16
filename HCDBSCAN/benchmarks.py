@@ -1,3 +1,7 @@
+import numpy as np
+from clustering import DBSCAN
+from clustering import evaluation_metric
+
 
 # Random Search
 def RS_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100, n_max = 12, n_min = 8, ele_max = 200,n_init = 5, n_iter = 10, n_test = 50, str_cov = 'se',str_initial_method_bo='uniform',seed=0,clustering_method='dbscan',metric_method = 'daivies_bouldin',hyp_dict = {"eps" : 0.5,"min_samples" : 5, "p" : 2 } , bounds = np.array([[0.1,2],[0.1,15],[0.1,5]]), integer_var = [0,1],constraint='hard',data_name ='mnist',hyperparamter_optimization ='ADMMBO',constraint_function_list = None,acquisition_function='EI',alpha=2,beta = 4,initial_index=0):
@@ -29,7 +33,7 @@ def RS_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         for idx_, key in enumerate(hyp_key):
             hyp_dict[key] = X_val[idx_]
 
-        cluster = clustering(clustering_method=clustering_method,hyp_dict = hyp_dict)
+        cluster = DBSCAN.clustering(clustering_method=clustering_method,hyp_dict = hyp_dict)
         
         cluster_data = cluster.fit(train_data)
         labels = cluster_data.labels_
@@ -39,7 +43,7 @@ def RS_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score = 10
         else:
-            score = metric(train_data,labels,train_labels = train_labels,metric_method=metric_method)
+            score = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method=metric_method)
 
         for con_idx in range(n_constraint):
 
@@ -49,7 +53,7 @@ def RS_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score = 10
         else:
-            score = metric(train_data,labels,train_labels = train_labels,metric_method='normalized_mutual_info_score')
+            score = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method='normalized_mutual_info_score')
         NMI_train = np.append(NMI_train, score)
     C_train = np.array(C_train)
     real_C_train = C_train
@@ -88,7 +92,7 @@ def Grid_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 1
         for idx_, key in enumerate(hyp_key):
             hyp_dict[key] = X_val[idx_]
 
-        cluster = clustering(clustering_method=clustering_method,hyp_dict = hyp_dict)
+        cluster = DBSCAN.clustering(clustering_method=clustering_method,hyp_dict = hyp_dict)
         
         cluster_data = cluster.fit(train_data)
         labels = cluster_data.labels_
@@ -98,7 +102,7 @@ def Grid_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 1
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score = 10
         else:
-            score = metric(train_data,labels,train_labels = train_labels,metric_method=metric_method)
+            score = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method=metric_method)
 
 
         for con_idx in range(n_constraint):
@@ -110,7 +114,7 @@ def Grid_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 1
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score2 = 10
         else:
-            score2 = metric(train_data,labels,train_labels = train_labels,metric_method = 'normalized_mutual_info_score',noise=False)
+            score2 = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method = 'normalized_mutual_info_score',noise=False)
         NMI_train = np.append(NMI_train, score2)
     C_train = np.array(C_train)
     real_C_train = C_train
@@ -140,7 +144,7 @@ def BO_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
     for hyp_set in X_train :
         for idx_, key in enumerate(hyp_key):
             hyp_dict[key] = hyp_set[idx_]
-        cluster = clustering(clustering_method = clustering_method,hyp_dict = hyp_dict)
+        cluster = DBSCAN.clustering(clustering_method = clustering_method,hyp_dict = hyp_dict)
     
         cluster_data = cluster.fit(train_data)
         labels = cluster_data.labels_
@@ -149,13 +153,13 @@ def BO_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score = 10
         else:
-            score = metric(train_data,labels,train_labels = train_labels,metric_method = metric_method)
+            score = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method = metric_method)
 
         F_train.append(score)
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score2 = 10
         else:
-            score2 = metric(train_data,labels,train_labels = train_labels,metric_method = 'normalized_mutual_info_score',noise=False)
+            score2 = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method = 'normalized_mutual_info_score',noise=False)
         NMI_train.append(score2)
         # Constraints 
         for con_idx in range(n_constraint):
@@ -208,7 +212,7 @@ def BO_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         for idx_, key in enumerate(hyp_key):
             hyp_dict[key] = next_x[0][idx_]
 
-        cluster = clustering(clustering_method = clustering_method,hyp_dict = hyp_dict)
+        cluster = DBSCAN.clustering(clustering_method = clustering_method,hyp_dict = hyp_dict)
 
         cluster_data = cluster.fit(train_data)
         labels = cluster_data.labels_
@@ -218,7 +222,7 @@ def BO_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score = 10
         else:
-            score = metric(train_data,labels,train_labels = train_labels,metric_method = metric_method )
+            score = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method = metric_method )
 
         for con_idx in range(n_constraint):
 
@@ -230,7 +234,7 @@ def BO_(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M = 100
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1 or len(set(labels))==len(labels):
             score2 = 10
         else:
-            score2 = metric(train_data,labels,train_labels = train_labels,metric_method = 'normalized_mutual_info_score',noise=False)
+            score2 = evaluation_metric.metric(train_data,labels,train_labels = train_labels,metric_method = 'normalized_mutual_info_score',noise=False)
         NMI_train = np.append(NMI_train,score2)
         
     C_train = np.array(C_train)

@@ -12,8 +12,6 @@ from torch.functional import _return_counts
 #from numpy.core.fromneric import _alen_dispathcer
 #import numpy as np
 #from numpy.lib.type_check import _asfarray_dispatcher
-import torch
-import gpytorch
 from gpytorch.kernels import ScaleKernel, RBFKernel
 from gpytorch.kernels import ScaleKernel, MaternKernel
 from sklearn.preprocessing import StandardScaler
@@ -25,8 +23,7 @@ from DBCV import DBCV
 import sklearn.cluster
 import sklearn.metrics
 import umap
-from sklearn.decomposition import PCA
-from scipy.stats import norm
+
 
 
 
@@ -35,7 +32,7 @@ from __future__ import division
 from __future__ import print_function
 #%%
 
-import time
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -44,131 +41,16 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 import pandas as pd
-import imageio
-#%%
-from functools import reduce
+
 #%%
 from ADMMBO import kernel
 from clustering import evaluation_metric as EM
 from ADMMBO import gaussian_process as GP
 from ADMMBO import plot
-device = 'cpu'
 
-train_data0, train_labels = import_data(data='mnist',size=3000)
-show_data = embedding_data(train_data = train_data0,n_components = 2 )
-
-color_list = ['lightcoral','pink','r','y','g','c','b','m','green','navy']
-
-for i in range(10):
-    idx = (train_labels==i)
-    plt.scatter(show_data[idx,0],show_data[idx,1],label=i,color=color_list[i],alpha=0.5)
-
-plt.legend()
-plt.savefig("mnist_preview.svg")
-
-idx_list = [2,2,2,9,2,9,2,2,8,1]
-for i in range(10):
-    idx = (train_labels==i)
-    plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
-    plt.scatter(show_data[idx,0][idx_list[i]],show_data[idx,1][idx_list[i]],label=i,color=color_list[i],s=40)
-plt.legend()
-plt.savefig("mnist_pointview1.svg")
-
-idx=4
-loca=80
-plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-idx=9
-loca=35
-plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-idx=7
-loca=13
-plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-idx=8
-loca=127
-plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-idx=5
-loca=141
-plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-idx=3
-loca=59
-plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-plt.legend()
-plt.xlim(0,18)
-plt.ylim(0,10)
-for i in range(10):
-    idx = (train_labels==i)
-    plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
-plt.savefig("mnist_pointview2.svg")
-#%%
-
-start_date = '2022-06-02-real'
-my_path = r"c:/Users/user/Documents/GitHub/HC-DBSCAN/" + start_date
-os.makedirs(my_path, exist_ok=True) 
-os.makedirs(my_path+"/images", exist_ok=True) 
-f = open(my_path+"/"+"log_"+ start_date +".txt", 'w')
-f.write(start_date+ "\n")
-
-def constraint_function79(cluster_data):
-    labels = cluster_data.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    # Feasible solution = negative value
-    C_score = - np.double(labels[80]==labels[35])+1
-
-    return C_score
-
-def constraint_function94(cluster_data):
-    labels = cluster_data.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    # Feasible solution = negative value
-    C_score = - np.double(labels[35]==labels[13])+1
-
-    return C_score
-
-def constraint_function38(cluster_data):
-    labels = cluster_data.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    # Feasible solution = negative value
-    C_score = - np.double(labels[127]==labels[141])+1
-
-    return C_score
-
-def constraint_function35(cluster_data):
-    labels = cluster_data.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    # Feasible solution = negative value
-    C_score = - np.double(labels[127]==labels[59])+1
-
-    return C_score
-
-def constraint_function58(cluster_data):
-    labels = cluster_data.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    # Feasible solution = negative value
-    C_score = - np.double(labels[59]==labels[141])+1
-
-    return C_score    
-
-n_labels=0
-def constraint_function1(cluster_data):
-    labels = cluster_data.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    # Feasible solution = negative value
-    C_score = - min(n_labels - n_clusters , n_clusters -n_labels)
-
-    return C_score
-constraint_function_list = [constraint_function1,constraint_function79, constraint_function94,constraint_function38,constraint_function35,constraint_function58]
-
-f.close()
-
-data_name_list = []
-n_labels_list = []
 def HC_DBSCAN(data_name_list,n_labels_list):
     output_csv = []
     for data_name in data_name_list:
-    #for data_name in ["mnist"]:
-    #for data_name in ['mnist','table_4','table_5']:
-        
-
         # Data Load and embedding
         train_data0, train_labels = import_data(data=data_name,size=3000)
         show_data = embedding_data(train_data = train_data0,n_components = 2 )
@@ -397,18 +279,129 @@ def HC_DBSCAN(data_name_list,n_labels_list):
             plt.plot(x_axis[origin_index],nmi_list_mean[origin_index] - nmi_list_std[origin_index],alpha=0.3,linestyle='dotted',color=color_list[idx])
         plt.legend(loc='upper right')
         plt.savefig(my_path + my_file)
-
-
-        ####################################################################################################################
-
-        ######################################################################################################################
     return output_csv
-        
-my_path = r"c:/Users/user/Documents/GitHub/Constraint_DBC/" + start_date
-col_names = ["HPO",	"data_name",	"constraint",	"n_clsuters",	"n_elements",	"mean_1",	"var_1",	"min_1",	"mean,_2",	"var_2",	"min_2",	"mean_noise"	,"var_noise",	"min_noise",	"n_cluster1","regret","n_cluster_draw_1",	"mean_4"	,"var_4"	,"min_4",	"nmi_mean"	,"nmi_var",	"nmi_min", "nmi_mean_penalty_noise"	,"nmi_var_penalty_noise",	"nmi_min_penalty_noise", "nmi_mean_no_noise"	,"nmi_var_no_noise",	"nmi_min_no_noise", 	"mean_noise2"	,"var_noise2",	"min_noise2"	,"n_cluster2"	,"regret2","n_cluster_draw_1"]
-output_csv = pd.DataFrame(output_csv)
-output_csv.columns = col_names
-output_csv.to_csv(my_path + "/" +start_date+".csv")
 
 
+def main():
+    device = 'cpu'
 
+    train_data0, train_labels = import_data(data='mnist',size=3000)
+    show_data = embedding_data(train_data = train_data0,n_components = 2 )
+
+    color_list = ['lightcoral','pink','r','y','g','c','b','m','green','navy']
+
+    for i in range(10):
+        idx = (train_labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],label=i,color=color_list[i],alpha=0.5)
+
+    plt.legend()
+    plt.savefig("mnist_preview.svg")
+
+    idx_list = [2,2,2,9,2,9,2,2,8,1]
+    for i in range(10):
+        idx = (train_labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
+        plt.scatter(show_data[idx,0][idx_list[i]],show_data[idx,1][idx_list[i]],label=i,color=color_list[i],s=40)
+    plt.legend()
+    plt.savefig("mnist_pointview1.svg")
+
+    idx=4
+    loca=80
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=9
+    loca=35
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=7
+    loca=13
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=8
+    loca=127
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=5
+    loca=141
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=3
+    loca=59
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    plt.legend()
+    plt.xlim(0,18)
+    plt.ylim(0,10)
+    for i in range(10):
+        idx = (train_labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
+    plt.savefig("mnist_pointview2.svg")
+    #%%
+
+    start_date = '2022-06-02-real'
+    my_path = r"c:/Users/user/Documents/GitHub/HC-DBSCAN/" + start_date
+    os.makedirs(my_path, exist_ok=True) 
+    os.makedirs(my_path+"/images", exist_ok=True) 
+    f = open(my_path+"/"+"log_"+ start_date +".txt", 'w')
+    f.write(start_date+ "\n")
+
+    def constraint_function79(cluster_data):
+        labels = cluster_data.labels_
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        # Feasible solution = negative value
+        C_score = - np.double(labels[80]==labels[35])+1
+
+        return C_score
+
+    def constraint_function94(cluster_data):
+        labels = cluster_data.labels_
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        # Feasible solution = negative value
+        C_score = - np.double(labels[35]==labels[13])+1
+
+        return C_score
+
+    def constraint_function38(cluster_data):
+        labels = cluster_data.labels_
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        # Feasible solution = negative value
+        C_score = - np.double(labels[127]==labels[141])+1
+
+        return C_score
+
+    def constraint_function35(cluster_data):
+        labels = cluster_data.labels_
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        # Feasible solution = negative value
+        C_score = - np.double(labels[127]==labels[59])+1
+
+        return C_score
+
+    def constraint_function58(cluster_data):
+        labels = cluster_data.labels_
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        # Feasible solution = negative value
+        C_score = - np.double(labels[59]==labels[141])+1
+
+        return C_score    
+
+    n_labels=0
+    def constraint_function1(cluster_data):
+        labels = cluster_data.labels_
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        # Feasible solution = negative value
+        C_score = - min(n_labels - n_clusters , n_clusters -n_labels)
+
+        return C_score
+    constraint_function_list = [constraint_function1,constraint_function79, constraint_function94,constraint_function38,constraint_function35,constraint_function58]
+
+    f.close()
+
+    data_name_list = []
+    n_labels_list = []
+    
+    
+            
+    my_path = r"c:/Users/user/Documents/GitHub/Constraint_DBC/" + start_date
+    col_names = ["HPO",	"data_name",	"constraint",	"n_clsuters",	"n_elements",	"mean_1",	"var_1",	"min_1",	"mean,_2",	"var_2",	"min_2",	"mean_noise"	,"var_noise",	"min_noise",	"n_cluster1","regret","n_cluster_draw_1",	"mean_4"	,"var_4"	,"min_4",	"nmi_mean"	,"nmi_var",	"nmi_min", "nmi_mean_penalty_noise"	,"nmi_var_penalty_noise",	"nmi_min_penalty_noise", "nmi_mean_no_noise"	,"nmi_var_no_noise",	"nmi_min_no_noise", 	"mean_noise2"	,"var_noise2",	"min_noise2"	,"n_cluster2"	,"regret2","n_cluster_draw_1"]
+    output_csv = pd.DataFrame(output_csv)
+    output_csv.columns = col_names
+    output_csv.to_csv(my_path + "/" +start_date+".csv")
+
+
+if __name__ == "__main__":
+    main()
