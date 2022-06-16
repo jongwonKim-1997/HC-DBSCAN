@@ -105,7 +105,12 @@ def main():
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] *( ADMMBO_dict['alpha']+ len(constraint_function_list)*ADMMBO_dict['beta']) +  ADMMBO_dict['n_init']
         if idx==3:
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] -  ADMMBO_dict['n_init']
-        X_train, F_train, C_train, real_C_train,NMI_train,Y_train = HPO(**ADMMBO_dict)
+        X_train, F_train, C_train, real_C_train,NMI_tain,Y_train = HPO(**ADMMBO_dict)
+        C_train = np.array(C_train)
+        print(F_train.shape)
+        print(C_train.shape)
+        print(np.sum(C_train,axis=0).shape)
+        F_train = F_train + np.sum(C_train,axis=0)
         print("num : "+ str(len(X_train)))
         print("min : "+str(np.min(F_train)) )
         best_hyperparameter = X_train[np.argmin(F_train)]
@@ -172,7 +177,7 @@ def main():
     plt.close(fig)
     fig = plt.figure()
     for idx2, labels in enumerate(Best_label_list):
-        plt.subplot(2,2,idx+1)    
+        plt.subplot(2,2,idx2+1)    
         loca=80
         idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
@@ -227,3 +232,6 @@ def main():
 if __name__ == "__main__":
     main()
 
+#%%
+A= np.ones((3,4,5))
+np.sum(A,axis=2)
