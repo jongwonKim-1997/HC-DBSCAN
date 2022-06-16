@@ -106,7 +106,7 @@ def main():
         if idx==3:
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] -  ADMMBO_dict['n_init']
         X_train, F_train, C_train, real_C_train,NMI_tain,Y_train = HPO(**ADMMBO_dict)
-        C_train = np.array(C_train)
+        C_train = (np.array(C_train)>0)*10
         print(F_train.shape)
         print(C_train.shape)
         print(np.sum(C_train,axis=0).shape)
