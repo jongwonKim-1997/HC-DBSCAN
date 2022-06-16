@@ -31,3 +31,18 @@ We also provide whole experiments results and process. So if you want to check t
 * imageio 2.16.1
 * torchvision 0.10.0
 * DBCV 
+
+
+## Development
+
+To run the unit test for MNIST dataset,
+
+> python HC-DBSCAN_MNIST.py
+
+This code returns a clustering results of HC-DBSCAN and benchmarks with a constraint on the number of clusters and 5 cannot-link constraints.
+
+If you want to run the HC-DBSCAN for other dataset (Ex:dry_bean),
+
+> python HC-DBSCAN_benchmarks.py --data_name=dry_bean
+
+We provide an experimental environment for all datasets presented in our paper, "Constrained Density-Based Spatial Clustering of Applications with Noise (DBSCAN) using Hyperparameter Optimization".
