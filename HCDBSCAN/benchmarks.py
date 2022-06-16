@@ -1,6 +1,6 @@
 import numpy as np
-from clustering import DBSCAN
-from clustering import evaluation_metric
+from HCDBSCAN.clustering import DBSCAN
+from HCDBSCAN.clustering import evaluation_metric
 
 
 # Random Search
