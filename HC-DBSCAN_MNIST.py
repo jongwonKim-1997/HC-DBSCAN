@@ -102,11 +102,12 @@ def main():
     NMI_val_list=[]
     for idx, HPO in enumerate(HPO_list):
         if idx==1:
-            ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] *( ADMMBO_dict['alpha']+ ADMMBO_dict['beta']) +  ADMMBO_dict['n_init']
+            ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] *( ADMMBO_dict['alpha']+ len(constraint_function_list)*ADMMBO_dict['beta']) +  ADMMBO_dict['n_init']
         if idx==3:
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] -  ADMMBO_dict['n_init']
         X_train, F_train, C_train, real_C_train,NMI_train,Y_train = HPO(**ADMMBO_dict)
         print("num : "+ str(len(X_train)))
+        print("min : "+str(np.min(F_train)) )
         best_hyperparameter = X_train[np.argmin(F_train)]
         hyp_key = hyp_dict.keys()
         for idx_, key in enumerate(hyp_key):
@@ -207,21 +208,22 @@ def main():
     plt.show()
     plt.close(fig)
 
-    
-    fig = plt.figure()
+     fig = plt.figure()
+    for idx, labels in enumerate(Best_label_list):
+        plt.subplot(2,2,idx+1)    
+        plt.legend()
+        plt.xlim(-2,16)
+        plt.ylim(-2,12)
 
-
-    n_labels = len(np.unique(labels)) 
-    for i in range(-1,n_labels):
-        idx = (labels==i)
-        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01)
-    
-    plt.title("HC-DBSCAN result with MNIST dataset")
-    plt.legend()
-    plt.xlim(-2,16)
-    plt.ylim(-2,12)
+        n_labels = len(np.unique(labels)) 
+        for i in range(-1,n_labels):
+            idx_list = (labels==i)
+            plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
+        plt.title(HPO_list_name[idx] +" result with MNIST dataset with NMI value:" +str(NMI_val_list[idx]))
     plt.show()
     plt.close(fig)
+
+
 if __name__ == "__main__":
     main()
 
