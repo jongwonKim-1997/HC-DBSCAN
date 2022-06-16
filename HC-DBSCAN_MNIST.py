@@ -100,7 +100,7 @@ def main():
     Best_X_list = []
     Best_label_list = []
     NMI_val_list=[]
-    noise_rate_list =[]
+
     for idx, HPO in enumerate(HPO_list):
         if idx==1:
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] *( ADMMBO_dict['alpha']+ len(constraint_function_list)*ADMMBO_dict['beta']) +  ADMMBO_dict['n_init']
@@ -108,12 +108,7 @@ def main():
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] -  ADMMBO_dict['n_init']
         X_train, F_train, C_train, real_C_train,NMI_tain,Y_train = HPO(**ADMMBO_dict)
         C_train = (np.array(C_train)>0)*10
-        print(F_train.shape)
-        print(C_train.shape)
-        print(np.sum(C_train,axis=0).shape)
         F_train = F_train + np.sum(C_train,axis=0)
-        print("num : "+ str(len(X_train)))
-        print("min : "+str(np.min(F_train)) )
         best_hyperparameter = X_train[np.argmin(F_train)]
         hyp_key = hyp_dict.keys()
         for idx_, key in enumerate(hyp_key):
@@ -128,8 +123,7 @@ def main():
         NMI_val_list.append(NMI_value)
         Best_label_list.append(labels)
         n_labels = len(labels)
-        non_noise_rate = sum(labels!=-1)/n_labels
-        noise_rate_list.append(non_noise_rate)
+
     
 
     # Plot the image
@@ -179,6 +173,7 @@ def main():
     plt.title("MNIST dataset with five CL constraints")
     plt.show()
     plt.close(fig)
+
     fig = plt.figure()
     for idx, labels in enumerate(Best_label_list):
         plt.subplot(2,2,idx+1)    
@@ -190,7 +185,7 @@ def main():
         for i in range(-1,n_labels):
             idx_list = (labels==i)
             plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
-        plt.title(HPO_list_name[idx] +"with NMI value:" +str(NMI_val_list[idx]) +" noise rate:" +str(noise_rate_list[idx]))
+        plt.title(HPO_list_name[idx] +"with NMI value:" +str(NMI_val_list[idx]))
     plt.show()
     plt.close(fig)
 
@@ -198,6 +193,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-#%%
-A= np.ones((3,4,5))
-np.sum(A,axis=2)
