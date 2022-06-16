@@ -1,4 +1,4 @@
-#%%
+%%
 import torchvision.datasets as dsets
 import torchvision.transforms as transforms
 

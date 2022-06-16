@@ -1,5 +1,5 @@
 
-import torchs
+import torch
 
 
 from gpytorch.functions import MaternCovariance

@@ -1,11 +1,14 @@
-import numpy as np
+
 from HCDBSCAN.clustering import DBSCAN
 from HCDBSCAN.clustering import evaluation_metric 
+from HCDBSCAN import kernel
+
+import numpy as np
 from scipy.stats import norm
 import time
 import torch
 import gpytorch
-import kernel
+
 
 def predict_with_optimized_hyps(X_train, U_train, X_test,n_hyp,hyp_setting):
     U_train = U_train.reshape(-1)
