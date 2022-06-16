@@ -143,7 +143,7 @@ def main():
     plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
     plt.legend()
-    plt.xlim(0,22)
+    plt.xlim(-2,16)
     plt.ylim(0,12)
     for i in range(10):
         idx = (train_labels==i)
@@ -153,31 +153,31 @@ def main():
     plt.close(fig)
 
     fig = plt.figure()
-    idx=4
     loca=80
+    idx=labels[loca]
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     idx=9
-    loca=35
+    idx=labels[loca]
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     idx=7
-    loca=13
+    idx=labels[loca]
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     idx=8
-    loca=127
+    idx=labels[loca]
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     idx=5
-    loca=141
+    idx=labels[loca]
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     idx=3
-    loca=59
+    idx=labels[loca]
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     plt.annotate(s='', xy=show_data[80], xytext=show_data[35], arrowprops=dict(arrowstyle='<->'))
-    plt.annotate(s='', xy=show_data[35], xytext=show_data[15], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[35], xytext=show_data[13], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[127], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
     plt.legend()
-    plt.xlim(0,22)
+    plt.xlim(-2,16)
     plt.ylim(0,12)
 
     n_labels = len(np.unique(labels)) 
@@ -199,7 +199,7 @@ def main():
     
     plt.title("HC-DBSCAN result with MNIST dataset")
     plt.legend()
-    plt.xlim(0,22)
+    plt.xlim(-2,16)
     plt.ylim(0,12)
     plt.show()
     plt.close(fig)
