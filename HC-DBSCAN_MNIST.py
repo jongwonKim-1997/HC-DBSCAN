@@ -176,44 +176,6 @@ def main():
     plt.show()
     plt.close(fig)
     fig = plt.figure()
-    for idx2, labels in enumerate(Best_label_list):
-        plt.subplot(2,2,idx2+1)    
-        loca=80
-        idx=labels[loca]+1
-        plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-        loca=35
-        idx=labels[loca]+1
-        plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-        loca=13
-        idx=labels[loca]+1
-        plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-        loca=59
-        idx=labels[loca]+1
-        plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-        loca=127
-        idx=labels[loca]+1
-        plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-        loca=141
-        idx=labels[loca]+1
-        plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
-        plt.annotate(s='', xy=show_data[80], xytext=show_data[35], arrowprops=dict(arrowstyle='<->'))
-        plt.annotate(s='', xy=show_data[35], xytext=show_data[13], arrowprops=dict(arrowstyle='<->'))
-        plt.annotate(s='', xy=show_data[127], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
-        plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
-        plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
-        plt.legend()
-        plt.xlim(-2,16)
-        plt.ylim(-2,12)
-
-        n_labels = len(np.unique(labels)) 
-        for i in range(-1,n_labels):
-            idx_list = (labels==i)
-            plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
-        plt.title(HPO_list_name[idx2] +" result with MNIST dataset with NMI value:" +str(NMI_val_list[idx2]))
-    plt.show()
-    plt.close(fig)
-
-    fig = plt.figure()
     for idx, labels in enumerate(Best_label_list):
         plt.subplot(2,2,idx+1)    
         plt.legend()
