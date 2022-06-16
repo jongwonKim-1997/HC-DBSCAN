@@ -54,7 +54,7 @@ class MaternKernel2(Kernel):
 
 
 from gpytorch.functions import RBFCovariance
-from gpysettings import trace_mode
+from gpytorch.settings import trace_mode
 from gpytorch.kernels import Kernel
 
 
