@@ -44,8 +44,8 @@ def main():
         def constraint_function_CL(cluster_data):
             labels = cluster_data.labels_
             n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-            # Feasible solution = negative value
-            C_score = - np.double(labels[idx1]==labels[idx2])+1
+            # Feasible solution = non-positive value
+            C_score = - np.double(labels[idx1]!=labels[idx2])+1
             return C_score
         return constraint_function_CL
 
@@ -54,7 +54,7 @@ def main():
     def constraint_function1(cluster_data):
         labels = cluster_data.labels_
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-        # Feasible solution = negative value
+        # Feasible solution = non-positive value
         C_score = - min(n_labels - n_clusters , n_clusters -n_labels)
 
         return C_score
@@ -124,6 +124,7 @@ def main():
 
     # Plot the image
     color_list = ['lightcoral','pink','r','y','g','c','b','m','green','navy']
+    color_list = color_list + color_list
     fig = plt.figure()
     for i in range(10):
         idx = (train_labels==i)
@@ -172,22 +173,22 @@ def main():
     for idx, labels in enumerate(Best_label_list):
         plt.subplot(2,2,idx+1)    
         loca=80
-        idx=labels[loca]
+        idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
         loca=35
-        idx=labels[loca]
+        idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
         loca=13
-        idx=labels[loca]
+        idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
         loca=59
-        idx=labels[loca]
+        idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
         loca=127
-        idx=labels[loca]
+        idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
         loca=141
-        idx=labels[loca]
+        idx=labels[loca]+1
         plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
         plt.annotate(s='', xy=show_data[80], xytext=show_data[35], arrowprops=dict(arrowstyle='<->'))
         plt.annotate(s='', xy=show_data[35], xytext=show_data[13], arrowprops=dict(arrowstyle='<->'))
@@ -223,3 +224,4 @@ def main():
     plt.close(fig)
 if __name__ == "__main__":
     main()
+
