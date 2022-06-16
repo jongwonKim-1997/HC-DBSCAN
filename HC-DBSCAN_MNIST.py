@@ -100,7 +100,11 @@ def main():
     Best_X_list = []
     Best_label_list = []
     NMI_val_list=[]
-    for HPO in HPO_list:
+    for idx, HPO in enumerate(HPO_list):
+        if idx==1:
+            ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] *( ADMMBO_dict['alpha']+ ADMMBO_dict['beta']) +  ADMMBO_dict['n_init']
+        if idx==3:
+            ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] -  ADMMBO_dict['n_init']
         X_train, F_train, C_train, real_C_train,NMI_train,Y_train = HPO(**ADMMBO_dict)
         print("num : "+ str(len(X_train)))
         best_hyperparameter = X_train[np.argmin(F_train)]
