@@ -100,6 +100,7 @@ def main():
     Best_X_list = []
     Best_label_list = []
     NMI_val_list=[]
+    noise_rate_list =[]
     for idx, HPO in enumerate(HPO_list):
         if idx==1:
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] *( ADMMBO_dict['alpha']+ len(constraint_function_list)*ADMMBO_dict['beta']) +  ADMMBO_dict['n_init']
@@ -126,6 +127,9 @@ def main():
         Best_X_list.append(best_hyperparameter)
         NMI_val_list.append(NMI_value)
         Best_label_list.append(labels)
+        n_labels = len(labels)
+        non_noise_rate = sum(labels!=-1)/n_labels
+        noise_rate_list.append(non_noise_rate)
     
 
     # Plot the image
@@ -186,7 +190,7 @@ def main():
         for i in range(-1,n_labels):
             idx_list = (labels==i)
             plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
-        plt.title(HPO_list_name[idx] +" result with MNIST dataset with NMI value:" +str(NMI_val_list[idx]))
+        plt.title(HPO_list_name[idx] +"with NMI value:" +str(NMI_val_list[idx]) +" noise rate:" +str(noise_rate_list[idx]))
     plt.show()
     plt.close(fig)
 
