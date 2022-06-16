@@ -6,7 +6,9 @@
 
 from HCDBSCAN import core
 from HCDBSCAN import preprocessing
+from HCDBSCAN.clustering import DBSCAN
 
+from matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import time    
@@ -32,7 +34,7 @@ def main():
     scaler = MinMaxScaler()
     scaler.fit(train_data)
     train_data = scaler.transform(train_data)
-    
+        
 
     # Define constraint functions
     def constraint_CL(idx1,idx2):
@@ -92,8 +94,112 @@ def main():
         'initial_index':0
     }
 
-    X_train, F_train, C_train,real_C_train,NMI_train,Y_train = core.HC_DBSCAN(**ADMMBO_dict)
+    X_train, F_train, C_train, real_C_train,NMI_train,Y_train = core.HC_DBSCAN(**ADMMBO_dict)
 
-    print(F_train)
+    best_hyperparameter = X_train[np.argmin(F_train)]
+    
+    hyp_key = hyp_dict.keys()
+    for idx_, key in enumerate(hyp_key):
+        hyp_dict[key] = best_hyperparameter[idx_]
+
+    cluster = DBSCAN.clustering(clustering_method = ADMMBO_dict['clustering_method'], hyp_dict= hyp_dict)
+
+    cluster_data = cluster.fit(train_data)
+    labels = cluster_data.labels_
+
+    # Plot the image
+    color_list = ['lightcoral','pink','r','y','g','c','b','m','green','navy']
+    fig = plt.figure()
+    for i in range(10):
+        idx = (train_labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
+    plt.title("MNIST dataset")
+    plt.show()
+    plt.close(fig)
+
+
+    fig = plt.figure()
+    idx=4
+    loca=80
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=9
+    loca=35
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=7
+    loca=13
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=8
+    loca=127
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=5
+    loca=141
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=3
+    loca=59
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    plt.annotate(s='', xy=show_data[80], xytext=show_data[35], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[35], xytext=show_data[15], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[127], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
+    plt.legend()
+    plt.xlim(0,18)
+    plt.ylim(0,10)
+    for i in range(10):
+        idx = (train_labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
+    plt.show()
+    plt.title("MNIST dataset with five CL constraints")
+    plt.close(fig)
+
+    fig = plt.figure()
+    idx=4
+    loca=80
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=9
+    loca=35
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=7
+    loca=13
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=8
+    loca=127
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=5
+    loca=141
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    idx=3
+    loca=59
+    plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
+    plt.annotate(s='', xy=show_data[80], xytext=show_data[35], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[35], xytext=show_data[15], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[127], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
+    plt.legend()
+    plt.xlim(0,18)
+    plt.ylim(0,10)
+
+    n_labels = len(np.unique(labels)) 
+    for i in range(n_labels):
+        idx = (labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01)
+    plt.show()
+    plt.title("HC-DBSCAN result with MNIST dataset")
+    plt.close(fig)
+
+    
+    fig = plt.figure()
+    plt.legend()
+    plt.xlim(0,18)
+    plt.ylim(0,10)
+
+    n_labels = len(np.unique(labels)) 
+    for i in range(n_labels):
+        idx = (labels==i)
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01)
+    plt.show()
+    plt.title("HC-DBSCAN result with MNIST dataset")
+    plt.close(fig)
 if __name__ == "__main__":
     main()
