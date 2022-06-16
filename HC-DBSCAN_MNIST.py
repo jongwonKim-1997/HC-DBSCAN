@@ -74,8 +74,8 @@ def main():
         "n_max" : 0, 
         "n_min" : 0, 
         "ele_max" : label_max, 
-        "n_init" : 10, 
-        "n_iter" : 5, 
+        "n_init" : 20, 
+        "n_iter" : 10, 
         "n_test" : 500, 
         "str_cov" : 'se', 
         "str_initial_method_bo" : 'uniform', 
@@ -95,7 +95,7 @@ def main():
     }
 
     X_train, F_train, C_train, real_C_train,NMI_train,Y_train = core.HC_DBSCAN(**ADMMBO_dict)
-
+    print("num : "+ str(len(X_train)))
     best_hyperparameter = X_train[np.argmin(F_train)]
     
     hyp_key = hyp_dict.keys()
@@ -138,18 +138,18 @@ def main():
     loca=59
     plt.scatter(show_data[loca,0],show_data[loca,1],label=idx,color=color_list[idx],s=40)
     plt.annotate(s='', xy=show_data[80], xytext=show_data[35], arrowprops=dict(arrowstyle='<->'))
-    plt.annotate(s='', xy=show_data[35], xytext=show_data[15], arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=show_data[35], xytext=show_data[13], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[127], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
     plt.legend()
-    plt.xlim(0,18)
-    plt.ylim(0,10)
+    plt.xlim(0,22)
+    plt.ylim(0,12)
     for i in range(10):
         idx = (train_labels==i)
         plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
-    plt.show()
     plt.title("MNIST dataset with five CL constraints")
+    plt.show()
     plt.close(fig)
 
     fig = plt.figure()
@@ -177,29 +177,31 @@ def main():
     plt.annotate(s='', xy=show_data[127], xytext=show_data[59], arrowprops=dict(arrowstyle='<->'))
     plt.annotate(s='', xy=show_data[59], xytext=show_data[141], arrowprops=dict(arrowstyle='<->'))
     plt.legend()
-    plt.xlim(0,18)
-    plt.ylim(0,10)
+    plt.xlim(0,22)
+    plt.ylim(0,12)
 
     n_labels = len(np.unique(labels)) 
     for i in range(n_labels):
         idx = (labels==i)
         plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01)
-    plt.show()
     plt.title("HC-DBSCAN result with MNIST dataset")
+    plt.show()
     plt.close(fig)
 
     
     fig = plt.figure()
-    plt.legend()
-    plt.xlim(0,18)
-    plt.ylim(0,10)
+
 
     n_labels = len(np.unique(labels)) 
     for i in range(n_labels):
         idx = (labels==i)
         plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01)
-    plt.show()
+    
     plt.title("HC-DBSCAN result with MNIST dataset")
+    plt.legend()
+    plt.xlim(0,22)
+    plt.ylim(0,12)
+    plt.show()
     plt.close(fig)
 if __name__ == "__main__":
     main()
