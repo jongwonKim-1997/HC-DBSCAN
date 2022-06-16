@@ -208,7 +208,7 @@ def main():
     plt.show()
     plt.close(fig)
 
-     fig = plt.figure()
+    fig = plt.figure()
     for idx, labels in enumerate(Best_label_list):
         plt.subplot(2,2,idx+1)    
         plt.legend()
