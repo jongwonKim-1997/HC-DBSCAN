@@ -1,7 +1,7 @@
 
 import torch
 
-
+import numpy as np
 import gpytorch 
 
 
@@ -39,14 +39,14 @@ class MaternKernel2(Kernel):
             x2_ = (x2).div(self.lengthscale)
             
             distance = self.covar_dist(x1_, x2_, diag=diag, **params)
-            exp_component = torch.exp(-torch.sqrt(self.nu * 2) * distance)
+            exp_component = torch.exp(-np.sqrt(self.nu * 2) * distance)
 
             if self.nu == 0.5:
                 constant_component = 1
             elif self.nu == 1.5:
-                constant_component = (torch.sqrt(3) * distance).add(1)
+                constant_component = (np.sqrt(3) * distance).add(1)
             elif self.nu == 2.5:
-                constant_component = (torch.sqrt(5) * distance).add(1).add(5.0 / 3.0 * distance ** 2)
+                constant_component = (np.sqrt(5) * distance).add(1).add(5.0 / 3.0 * distance ** 2)
             return constant_component * exp_component
         return MaternCovariance.apply(
             x1, x2, self.lengthscale, self.nu, lambda x1, x2: self.covar_dist(x1, x2, **params)
@@ -54,7 +54,7 @@ class MaternKernel2(Kernel):
 
 
 from gpytorch.functions import RBFCovariance
-from gpytorch.settings import trace_mode
+from gpysettings import trace_mode
 from gpytorch.kernels import Kernel
 
 
