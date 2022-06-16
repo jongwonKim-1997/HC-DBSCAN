@@ -75,8 +75,8 @@ def main():
         "n_max" : 0, 
         "n_min" : 0, 
         "ele_max" : label_max, 
-        "n_init" : 20, 
-        "n_iter" : 10, 
+        "n_init" : 10, 
+        "n_iter" : 5, 
         "n_test" : 500, 
         "str_cov" : 'se', 
         "str_initial_method_bo" : 'uniform', 
@@ -171,7 +171,7 @@ def main():
     plt.show()
     plt.close(fig)
     fig = plt.figure()
-    for idx, labels in enumerate(Best_label_list):
+    for idx2, labels in enumerate(Best_label_list):
         plt.subplot(2,2,idx+1)    
         loca=80
         idx=labels[loca]+1
@@ -204,7 +204,7 @@ def main():
         for i in range(-1,n_labels):
             idx_list = (labels==i)
             plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
-        plt.title(HPO_list_name[idx] +" result with MNIST dataset with NMI value:" +str(NMI_val_list[idx]))
+        plt.title(HPO_list_name[idx2] +" result with MNIST dataset with NMI value:" +str(NMI_val_list[idx2]))
     plt.show()
     plt.close(fig)
 
