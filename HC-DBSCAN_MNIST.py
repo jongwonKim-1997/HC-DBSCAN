@@ -8,7 +8,7 @@ from HCDBSCAN import core
 from HCDBSCAN import preprocessing
 from HCDBSCAN.clustering import DBSCAN
 
-from matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import time    
