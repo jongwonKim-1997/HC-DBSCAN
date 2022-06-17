@@ -15,7 +15,7 @@ benchmark constrained methods for DBSCAN on simulated and real datasets.
 
 
 ## Requirements
-This list represent our experiment settings with HC-DBSCAN. We recommend to import equal or higher version of each package to utilize the HC-DBSCAN method.
+This list represents our experiment settings with HC-DBSCAN. We recommend to import equal or higher version of each package to utilize the HC-DBSCAN method.
 * Python 3.9.6
 * Pytorch 1.9.0
 * GPytorch 1.5.1
