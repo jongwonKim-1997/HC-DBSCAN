@@ -24,11 +24,11 @@ hyp_dict = {
     "eps" : 0.5,    
     "min_samples" : 5
 }
-
 def main(data_name = 'mnist',n_iter=10):
      # Load and preprocess the MNIST dataset 
     train_data0, train_labels = preprocessing.import_data(data=data_name,size=3000)
-    show_data = preprocessing.embedding_data(train_data = train_data0,n_components = 2 )
+    show_data = train_data0
+    
     if data_name != "reuters":
         if train_data0.shape[1]>10 : 
             train_data = preprocessing.embedding_data(train_data = train_data0,n_components =  round(np.sqrt(train_data0.shape[1]+1)) )
@@ -41,7 +41,10 @@ def main(data_name = 'mnist',n_iter=10):
     scaler = MinMaxScaler()
     scaler.fit(train_data)
     train_data = scaler.transform(train_data)
-        
+    scaler2 = MinMaxScaler()
+    scaler2.fit(show_data)
+    show_data = scaler2.transform(show_data)
+    
 
     # Define constraint functions
     def constraint_CL(idx1,idx2):
@@ -54,12 +57,13 @@ def main(data_name = 'mnist',n_iter=10):
         return constraint_function_CL
 
 
-    n_labels = len(np.unique(train_labels)) 
+    #n_labels = len(np.unique(train_labels)) 
+    n_labels = 6
     def constraint_function1(cluster_data):
         labels = cluster_data.labels_
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
         # Feasible solution = negative value
-        C_score = - min(int(n_labels *1.1) - n_clusters , n_clusters - int(n_labels*0.9))
+        C_score = - min(int(n_labels *1.0) - n_clusters , n_clusters - int(n_labels*1.0))
 
         return C_score
 
@@ -109,12 +113,12 @@ def main(data_name = 'mnist',n_iter=10):
             ADMMBO_dict['n_iter'] = ADMMBO_dict['n_iter'] -  ADMMBO_dict['n_init']
         X_train, F_train, C_train, real_C_train,NMI_tain,Y_train = HPO(**ADMMBO_dict)
         C_train = (np.array(C_train)>0)*10
-        print(F_train.shape)
-        print(C_train.shape)
-        print(np.sum(C_train,axis=0).shape)
+        #print(F_train.shape)
+        #print(C_train.shape)
+        #print(np.sum(C_train,axis=0).shape)
         F_train = F_train + np.sum(C_train,axis=0)
-        print("num : "+ str(len(X_train)))
-        print("min : "+str(np.min(F_train)) )
+        #print("num : "+ str(len(X_train)))
+        #print("min : "+str(np.min(F_train)) )
         best_hyperparameter = X_train[np.argmin(F_train)]
         hyp_key = hyp_dict.keys()
         for idx_, key in enumerate(hyp_key):
@@ -135,27 +139,53 @@ def main(data_name = 'mnist',n_iter=10):
     fig = plt.figure()
     for i in range(10):
         idx = (train_labels==i)
-        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.01,color=color_list[i])
+        plt.scatter(show_data[idx,0],show_data[idx,1],alpha=0.3,color=color_list[i])
     plt.title(data_name +" dataset")
     plt.show()
     plt.close(fig)
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10,8))
     for idx, labels in enumerate(Best_label_list):
-        plt.subplot(2,2,idx+1)    
+        plt.subplot(2,2,idx+1)
         plt.legend()
-        plt.xlim(-2,16)
-        plt.ylim(-2,12)
-
+#        plt.xlim(-2,16)
+#        plt.ylim(-2,12)
+        labels = Best_label_list[idx]
+        n_clusters_res = len(set(labels)) - (1 if -1 in labels else 0)        
         n_labels = len(np.unique(labels)) 
         for i in range(-1,n_labels):
             idx_list = (labels==i)
-            plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.01)
-        plt.title(HPO_list_name[idx] +" for "+ data_name + " with NMI value:" +str(NMI_val_list[idx]))
+            if n_labels == n_clusters_res:
+                plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.05)
+            else:
+                plt.scatter(show_data[idx_list,0],show_data[idx_list,1],alpha=0.05,color='gray')
+        plt.title(HPO_list_name[idx] +" for "+ data_name + " with # of cluster:" +str(len(set(labels)) - (1 if -1 in labels else 0)))
+    plt.show()
+    plt.close(fig)
+
+        
+    for idx, labels in enumerate(Best_label_list):
+        plt.figure(figsize=(8,5))
+        #plt.legend()
+#        plt.xlim(-2,16)
+#        plt.ylim(-2,12)
+        labels = Best_label_list[idx]
+        n_clusters_res = len(set(labels)) - (1 if -1 in labels else 0)        
+        n_labels = len(np.unique(labels)) 
+        for i in range(-1,n_labels):
+            idx_list = (labels==i)
+            if 6 == n_clusters_res:
+                plt.scatter(show_data[idx_list,0],show_data[idx_list,1])
+            else:
+                plt.scatter(show_data[idx_list,0],show_data[idx_list,1],color='gray')
+        #plt.title(HPO_list_name[idx] +" for "+ data_name + " with # of cluster:" +str(len(set(labels)) - (1 if -1 in labels else 0)))
     plt.show()
     plt.close(fig)
 #%%
-main("mnist", 5)
+main("toy8", 30)
+#%%
+plt.figure(figsize=(8,5))
+plt.scatter([1,2,3],[4,5,6],color='gray')
 #%%
 parser = argparse.ArgumentParser()
 

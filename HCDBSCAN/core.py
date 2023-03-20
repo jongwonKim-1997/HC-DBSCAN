@@ -106,12 +106,15 @@ def HC_DBSCAN(train_data = None ,show_data = None,train_labels=None, rho = 0.5,M
 
     for hyp_set in X_train[:n_init] :
         for idx_, key in enumerate(hyp_key):
-            hyp_dict[key] = hyp_set[idx_]
+            if key =='min_samples':
+                hyp_dict[key] = int(hyp_set[idx_])
+            
         cluster = DBSCAN.clustering(clustering_method = clustering_method,hyp_dict = hyp_dict)
 
         cluster_data = cluster.fit(train_data)
         labels = cluster_data.labels_
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        print(n_clusters)
         if n_clusters == 0 or len(set(labels)) == 1 or n_clusters==1:
             score = 10
         else:

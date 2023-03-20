@@ -24,7 +24,7 @@ def import_data(data='mnist', size=1000, device='cpu'):
                                                 shuffle=False,
                                                 drop_last=True)
     
-        for X, Y in data_loader: # 미니 배치 단위로 꺼내온다. X는 미니 배치, Y느 ㄴ레이블.
+        for X, Y in data_loader: # 미니 배치 단위로 꺼내온다. X는 미니 배치, Y는 레이블.
             # image is already size of (28x28), no reshape
             # label is not one-hot encoded
             X = X.to(device).numpy()
@@ -115,19 +115,49 @@ def import_data(data='mnist', size=1000, device='cpu'):
         train_data = np.array(im_data_list)
         train_labels = np.array([0]*(len(train_data)-1)+[1])
     elif data == 'toy3':
-        train_data = pd.read_csv("./data/Compound.csv")
+        train_data = pd.read_csv("./HCDBSCAN/data/Compound.csv")
         train_data = train_data.dropna()
         train_labels = np.array([0]*(len(train_data)-1)+[1])
     elif data == 'toy4':
-        train_data = pd.read_csv("./data/pathbased.csv")
+        train_data = pd.read_csv("./HCDBSCAN/data/pathbased.csv")
         train_data = train_data.dropna()
         train_labels = np.array([0]*(len(train_data)-1)+[1])
     elif data == 'toy5':
-        train_data = pd.read_csv("./data/Aggregation.csv")
+        train_data = pd.read_csv("./HCDBSCAN/data/Aggregation.csv")
         train_data = train_data.dropna()
         train_labels = np.array([0]*(len(train_data)-1)+[1])
     elif data == 'toy6':
-        train_data = pd.read_csv("./data/spiral.csv")
+        train_data = pd.read_csv("./HCDBSCAN/data/spiral.csv")
+        train_data = train_data.dropna()
+        train_labels = np.array([0]*(len(train_data)-1)+[1])
+    elif data == 'toy7':
+        im = imageio.imread('./HCDBSCAN/data/toy7.png')
+        im_data = np.sum(im,axis=2)
+        im_data_list = []
+        for i in range(400):
+            for j in range(400):
+                if im_data[i,j] !=765:
+                    im_data_list.append([i,j])
+        train_data = np.array(im_data_list)
+        train_labels = np.array([0]*(len(train_data)-1)+[1])
+    elif data == 'toy8':
+        train_data = pd.read_csv("./HCDBSCAN/data/toy8.csv")
+        train_data = train_data.dropna()
+        train_labels = np.array([0]*(len(train_data)-1)+[1])
+    elif data == 'toy9':
+        train_data = pd.read_csv("./HCDBSCAN/data/toy9.csv")
+        train_data = train_data.dropna()
+        train_labels = np.array([0]*(len(train_data)-1)+[1])
+    elif data == 'toy10':
+        train_data = pd.read_csv("./HCDBSCAN/data/toy10.csv")
+        train_data = train_data.dropna()
+        train_labels = np.array([0]*(len(train_data)-1)+[1])
+    elif data == 'toy11':
+        train_data = pd.read_csv("./HCDBSCAN/data/toy11.csv")
+        train_data = train_data.dropna()
+        train_labels = np.array([0]*(len(train_data)-1)+[1])
+    elif data == 'toy12':
+        train_data = pd.read_csv("./HCDBSCAN/data/toy12.csv")
         train_data = train_data.dropna()
         train_labels = np.array([0]*(len(train_data)-1)+[1])
     else:
